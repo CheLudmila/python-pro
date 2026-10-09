@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Храми Києва — Духовна спадщина{% endblock %}
+
+{% block content %}
+<h1>Храми Києва</h1>
+<p>Місця духовної та культурної спадщини столиці: знайомтеся з їхньою історією та архітектурою.</p>
+<div class="books">
+    {% for church in churches %}
+    <article class="card">
+        <figure class="church-photo">
+            <img src="{{ church.image }}" alt="{{ church.name }} — загальний вигляд" loading="lazy" width="960" height="720">
+            <figcaption>Фото: <a href="{{ church.image_source }}">{{ church.photographer }}</a> · <a href="{{ church.license_url }}">{{ church.license }}</a></figcaption>
+        </figure>
+        <p class="eyebrow">Духовна спадщина Києва</p>
+        <h2>{{ church.name }}</h2>
+        <p>{{ church.description }}</p>
+        <p><strong>Адреса:</strong> {{ church.address }}</p>
+        <a href="{{ church.source }}">Дізнатися більше про храм →</a>
+    </article>
+    {% else %}
+    <p>Добірка храмів поки порожня.</p>
+    {% endfor %}
+</div>
+{% endblock %}

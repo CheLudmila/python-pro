@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Книги — Духовна спадщина{% endblock %}
+
+{% block content %}
+<h1>Добірка книг</h1>
+<p>Духовні тексти різних релігійних традицій для знайомства та роздумів.</p>
+<form class="search-form" action="{{ url_for('book_list') }}" method="get" role="search">
+    <label for="book-search">Пошук за назвою книги</label>
+    <div class="search-controls">
+        <input id="book-search" type="search" name="q" value="{{ query }}" placeholder="Наприклад, Біблія">
+        <button class="button" type="submit">Знайти</button>
+        {% if query %}<a href="{{ url_for('book_list') }}">Скинути пошук</a>{% endif %}
+    </div>
+</form>
+{% if query %}<p>Знайдено книг: {{ books|length }}. Запит: «{{ query }}».</p>{% endif %}
+<div class="books">
+    {% for book in books %}
+    <article class="card">
+        <figure class="church-photo">
+            <img src="{{ book.image }}" alt="{{ book.caption }}" loading="lazy" width="960" height="720">
+            <figcaption>{{ book.caption }}. <a href="{{ book.image_source }}">{{ book.photographer }}</a> · <a href="{{ book.license_url }}">{{ book.license }}</a></figcaption>
+        </figure>
+        <p class="eyebrow">{{ book.genre }}</p>
+        <h2>{{ book.title }}</h2>
+        <p>{{ book.tradition }}</p>
+    </article>
+    {% else %}
+    <p>{% if query %}За вашим запитом нічого не знайдено. Спробуйте іншу назву.{% else %}У добірці поки немає книг.{% endif %}</p>
+    {% endfor %}
+</div>
+{% endblock %}

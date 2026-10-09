@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Головна — Духовна спадщина{% endblock %}
+
+{% block content %}
+<section class="home-intro">
+    <p class="eyebrow">ДУХОВНА СПАДЩИНА · ЗНАЙОМСТВО З ТРАДИЦІЯМИ</p>
+    <h1>Історії, що надихають.<br><em>Місця, що зберігають сенс.</em></h1>
+    <p class="home-lead">Від сторінок давніх текстів до храмів Києва — відкривайте віру, культуру та мудрість у власному темпі.</p>
+</section>
+<section class="home-sections" aria-label="Розділи проєкту">
+    <article class="feature-card">
+        <div class="feature-visual book-visual">
+            {% if featured_book %}<img src="{{ featured_book.image }}" alt="{{ featured_book.caption }}" width="1563" height="2500">{% endif %}
+            <span class="collection-badge">Книг у добірці · {{ book_count }}</span>
+        </div>
+        <div class="feature-body">
+            <p class="eyebrow">01 / ЧИТАТИ Й РОЗМІРКОВУВАТИ</p>
+            <h2>Духовні книги</h2>
+            <p>Священні тексти різних традицій про віру, внутрішній світ і пошук сенсу.</p>
+            <a class="button" href="{{ url_for('book_list') }}">Відкрити добірку <span aria-hidden="true">↗</span></a>
+            {% if featured_book %}<p class="photo-credit">Зображення: <a href="{{ featured_book.image_source }}">{{ featured_book.photographer }}</a> · <a href="{{ featured_book.license_url }}">{{ featured_book.license }}</a></p>{% endif %}
+        </div>
+    </article>
+    <article class="feature-card">
+        <div class="feature-visual temple-visual">
+            {% if featured_church %}<img src="{{ featured_church.image }}" alt="{{ featured_church.name }}" width="960" height="713">{% endif %}
+            <span class="collection-badge">Храмів у добірці · {{ church_count }}</span>
+        </div>
+        <div class="feature-body">
+            <p class="eyebrow">02 / ВІДКРИВАТИ МІСТО</p>
+            <h2>Храми Києва</h2>
+            <p>Архітектура, історія та духовна спадщина столиці — місця, які варто пізнати ближче.</p>
+            <a class="button" href="{{ url_for('church_list') }}">Дослідити храми <span aria-hidden="true">↗</span></a>
+            {% if featured_church %}<p class="photo-credit">Фото: <a href="{{ featured_church.image_source }}">{{ featured_church.photographer }}</a> · <a href="{{ featured_church.license_url }}">{{ featured_church.license }}</a> · кадровано</p>{% endif %}
+        </div>
+    </article>
+</section>
+{% endblock %}
