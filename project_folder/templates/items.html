@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Книги — Моя книжкова полиця{% endblock %}
+
+{% block content %}
+<h1>Добірка книг</h1>
+<p>Знайомі автори та історії, які варто відкрити для себе.</p>
+<div class="books">
+    {% for book in books %}
+    <article class="card">
+        <p class="eyebrow">{{ book.genre }}</p>
+        <h2>{{ book.title }}</h2>
+        <p>{{ book.author }}</p>
+    </article>
+    {% else %}
+    <p>На полиці поки немає книг.</p>
+    {% endfor %}
+</div>
+{% endblock %}

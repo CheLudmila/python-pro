@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Моя книжкова полиця{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <a class="brand" href="{{ url_for('index') }}">Моя книжкова полиця</a>
+        <nav aria-label="Головне меню">
+            <a href="{{ url_for('index') }}" {% if request.endpoint == 'index' %}aria-current="page"{% endif %}>Головна</a>
+            <a href="{{ url_for('book_list') }}" {% if request.endpoint == 'book_list' %}aria-current="page"{% endif %}>Книги</a>
+            <a href="{{ url_for('about') }}" {% if request.endpoint == 'about' %}aria-current="page"{% endif %}>Про додаток</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>Навчальний проєкт на Python та Flask</footer>
+</body>
+</html>
