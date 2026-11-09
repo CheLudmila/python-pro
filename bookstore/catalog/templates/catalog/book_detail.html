@@ -1,0 +1,20 @@
+{% extends "catalog/base.html" %}
+{% block title %}{{ book.title }}{% endblock %}
+{% block content %}
+<a href="{% url 'catalog:book_list' %}">До каталогу</a>
+<article class="card mt-3">
+  <div class="card-body">
+    <p class="text-body-secondary mb-2">{{ book.category }}</p>
+    <h1>{{ book.title }}</h1>
+    <p>{{ book.author }}</p>
+    <p><strong>{{ book.price }} грн</strong> · Залишок: {{ book.stock }}</p>
+    {% if book.description %}{{ book.description|linebreaks }}{% endif %}
+    {% if perms.catalog.change_book %}
+      <a class="btn btn-primary" href="{% url 'catalog:book_update' book.pk %}">Редагувати</a>
+    {% endif %}
+    {% if perms.catalog.delete_book %}
+      <a class="btn btn-outline-danger" href="{% url 'catalog:book_delete' book.pk %}">Видалити</a>
+    {% endif %}
+  </div>
+</article>
+{% endblock %}

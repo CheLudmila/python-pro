@@ -1,0 +1,55 @@
+{% extends "catalog/base.html" %}
+{% block title %}Каталог книг{% endblock %}
+{% block content %}
+<h1 class="mb-4">Каталог книг</h1>
+<form method="get" class="card card-body mb-4">
+  <div class="row g-3 align-items-end">
+    {% for field in filter_form %}
+      <div class="col-md">
+        {% if field.name == "in_stock" %}
+          <div class="form-check mb-2">{{ field }} {{ field.label_tag }}</div>
+        {% else %}
+          <div class="mb-1">{{ field.label_tag }}</div>
+          {{ field }}
+        {% endif %}
+        {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+      </div>
+    {% endfor %}
+    <div class="col-md-auto">
+      <button class="btn btn-primary" type="submit">Застосувати</button>
+      <a class="btn btn-outline-secondary" href="{% url 'catalog:book_list' %}">Скинути</a>
+    </div>
+  </div>
+</form>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+  {% for book in books %}
+    <div class="col">
+      <article class="card h-100">
+        <div class="card-body">
+          <p class="text-body-secondary small mb-2">{{ book.category }}</p>
+          <h2 class="h5"><a class="stretched-link" href="{% url 'catalog:book_detail' book.pk %}">{{ book.title }}</a></h2>
+          <p class="mb-2">{{ book.author }}</p>
+          <p class="mb-0"><strong>{{ book.price }} грн</strong> ·
+            {% if book.stock %}У наявності{% else %}Немає в наявності{% endif %}
+          </p>
+        </div>
+      </article>
+    </div>
+  {% empty %}
+    <p class="col">Книг не знайдено.</p>
+  {% endfor %}
+</div>
+{% if is_paginated %}
+<nav class="mt-4" aria-label="Сторінки каталогу">
+  <ul class="pagination flex-wrap align-items-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="{% querystring page=page_obj.previous_page_number %}">Назад</a></li>
+    {% endif %}
+    <li class="page-item active"><span class="page-link" aria-current="page">{{ page_obj.number }} з {{ paginator.num_pages }}</span></li>
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="{% querystring page=page_obj.next_page_number %}">Далі</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}
