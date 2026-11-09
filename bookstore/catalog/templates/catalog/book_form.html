@@ -1,0 +1,24 @@
+{% extends "catalog/base.html" %}
+{% block title %}{% if object %}Редагування книги{% else %}Нова книга{% endif %}{% endblock %}
+{% block content %}
+<h1 class="mb-4">{% if object %}Редагування книги{% else %}Нова книга{% endif %}</h1>
+<form class="card card-body book-form" method="post">
+  {% csrf_token %}
+  {% for error in form.non_field_errors %}<p class="text-danger">{{ error }}</p>{% endfor %}
+  {% for field in form %}
+    <div class="mb-3">
+      <div class="mb-1">{{ field.label_tag }}</div>
+      {{ field }}
+      {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+    </div>
+  {% endfor %}
+  <div>
+    <button class="btn btn-primary" type="submit">Зберегти</button>
+    {% if object %}
+      <a class="btn btn-outline-secondary" href="{% url 'catalog:book_detail' object.pk %}">Скасувати</a>
+    {% else %}
+      <a class="btn btn-outline-secondary" href="{% url 'catalog:book_list' %}">Скасувати</a>
+    {% endif %}
+  </div>
+</form>
+{% endblock %}
