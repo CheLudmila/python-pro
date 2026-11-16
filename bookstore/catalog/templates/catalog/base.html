@@ -16,7 +16,19 @@
         {% if perms.catalog.add_book %}
           <a class="btn btn-outline-light btn-sm" href="{% url 'catalog:book_create' %}">Додати книгу</a>
         {% endif %}
-        <a class="btn btn-outline-light btn-sm" href="{% url 'admin:index' %}">Адмінка</a>
+        {% if user.is_staff %}
+          <a class="btn btn-outline-light btn-sm" href="{% url 'admin:index' %}">Адмінка</a>
+        {% endif %}
+        {% if user.is_authenticated %}
+          <span class="navbar-text py-0">{{ user.get_username }}</span>
+          <form method="post" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button class="btn btn-outline-light btn-sm" type="submit">Вийти</button>
+          </form>
+        {% else %}
+          <a class="btn btn-outline-light btn-sm" href="{% url 'accounts:login' %}">Увійти</a>
+          <a class="btn btn-outline-light btn-sm" href="{% url 'accounts:register' %}">Реєстрація</a>
+        {% endif %}
       </div>
     </div>
   </nav>

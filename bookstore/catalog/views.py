@@ -35,7 +35,6 @@ class BookDetailView(DetailView):
 
 class BookWriteMixin(PermissionRequiredMixin):
     model = Book
-    login_url = reverse_lazy("admin:login")
 
 
 class BookCreateView(BookWriteMixin, CreateView):
