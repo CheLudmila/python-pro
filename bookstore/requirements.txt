@@ -1,2 +1,6 @@
 Django>=6.0,<6.2
 django-debug-toolbar>=8,<9
+gunicorn>=23,<24
+psycopg[binary]>=3.2,<4
+redis>=5,<8
+whitenoise>=6,<7
