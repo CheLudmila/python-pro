@@ -4,7 +4,39 @@
 книгами, адмінкою й прикладами ORM. Кошик і замовлення можна додавати
 наступними етапами.
 
-## Запуск у PowerShell
+## Запуск у Docker Compose
+
+Запускайте команди з теки `bookstore`. Для нової інсталяції скопіюйте
+`.env.example` у `.env` і задайте власні `POSTGRES_PASSWORD` та
+`DJANGO_SECRET_KEY`.
+
+```powershell
+docker compose up --build --wait
+```
+
+Каталог доступний за адресою http://127.0.0.1:8000/. Під час запуску
+`web` застосовує міграції Django та збирає статику. PostgreSQL зберігає
+дані у томі `postgres_data`, а Django зберігає зібрану статику у
+`static_data`. Redis використовується як кеш Django.
+
+### Одноразове перенесення з SQLite
+
+Виконайте імпорт у нову базу PostgreSQL до початку роботи з каталогом.
+Джерело `bookstore.sqlite3` монтується в режимі читання. Перед імпортом
+зупиніть процеси, які записують у цей SQLite-файл.
+
+```powershell
+$sqlite = (Resolve-Path ./bookstore.sqlite3).Path
+docker compose build web
+docker compose run --rm -e SQLITE_IMPORT_PATH=/legacy/bookstore.sqlite3 --volume "${sqlite}:/legacy/bookstore.sqlite3:ro" web sh /app/import-sqlite.sh
+docker compose up --wait
+```
+
+Імпорт переносить каталог, облікові записи, групи, дозволи та службові
+дані застосунку. Django створює історію міграцій у PostgreSQL під час
+застосування схеми.
+
+## Локальний запуск із SQLite у PowerShell
 
 Потрібен Python 3.12 або новіший. Перейдіть у теку `bookstore` та виконайте:
 
@@ -34,8 +66,9 @@ http://127.0.0.1:8000/admin/ з обліковими даними, які зад
 доступне всім.
 
 Модель `accounts.User` успадковує `AbstractUser`. Команда `migrate`
-створює базу `bookstore.sqlite3`. Файл `db.sqlite3`, якщо він є, зберігається
-окремо. Дані з попередньої бази потребують окремого перенесення.
+створює базу `bookstore.sqlite3` під час локального запуску без
+`POSTGRES_HOST`. Файл `db.sqlite3`, якщо він є, належить до попередньої
+схеми з моделлю `auth.User`.
 
 ## Налагодження та журнал запитів
 
@@ -67,8 +100,8 @@ Middleware пише в консоль HTTP-метод, ім’я маршрут�
 Bootstrap CSS завантажується з CDN, а власний CSS —
 `catalog/static/catalog/store.css` — підключено через тег `static`.
 
-Налаштування розраховані на локальне навчання: SQLite, `DEBUG=True`,
-локальний ключ Django. Перед публікацією потрібні окремі production-налаштування.
+Локальний запуск без Docker за замовчуванням використовує SQLite,
+`DEBUG=True` і локальний ключ Django.
 
 ## Моделі
 
